@@ -21,12 +21,6 @@ void adicionar(char *buffer, int *total_mem)
     char c = 0;
     int length = 0;
     char *tmp;
-    if ((buffer = (char *)malloc(mem_left)) == NULL)
-    {
-        printf("Erro ao alocar memória\n");
-        system("pause");
-        exit(-1);
-    }
     setbuf(stdin, NULL);
     while ((c = getchar()) != '\n')
     {
@@ -40,11 +34,19 @@ void adicionar(char *buffer, int *total_mem)
             }
             buffer = tmp;
             ++(*total_mem);
-            mem_left = 1;
+            ++mem_left;
         }
         *(buffer + (length++)) = c;
         --mem_left;
     }
+    if ((tmp = (char *)realloc(buffer, (*total_mem) + 1)) == NULL)
+    {
+        printf("Erro ao realocar memória\n");
+        system("pause");
+        exit(1);
+    }
+    buffer = tmp;
+    ++(*total_mem);
     *(buffer + length) = '\0';
     nomes++;
     return;
@@ -53,16 +55,16 @@ void adicionar(char *buffer, int *total_mem)
 void listar(char *buffer)
 {
     system("cls");
-    int i=0, n_name=1, name_list = nomes;
+    int i = 0, n_name = 1, name_list = nomes;
     while (name_list > 0)
     {
         printf("%d) ", n_name);
-        while (*(buffer+i) != '\0')
+        while (*(buffer + i) != '\0')
         {
-            putchar(buffer[i]);
+            printf("%c", *(buffer + i));
             i++;
         }
-        putchar("\n");
+        printf("\n");
         --name_list;
         ++n_name;
     }
@@ -71,11 +73,17 @@ void listar(char *buffer)
 
 int main()
 {
-    system("cls");
-    int choice;
-    char *buffer, total_mem = 2;
+    int choice, total_mem = 1;
+    char *buffer;
+    if ((buffer = (char *)malloc(total_mem)) == NULL)
+    {
+        printf("Erro ao alocar memória\n");
+        system("pause");
+        exit(-1);
+    }
     for (;;)
     {
+        system("cls");
         choice = menu();
         switch (choice)
         {
