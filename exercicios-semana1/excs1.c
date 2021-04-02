@@ -19,7 +19,6 @@ void adicionar(char *buffer, int *total_mem)
 {
     int mem_left = 1;
     char c = 0;
-    int length = 0;
     char *tmp;
     setbuf(stdin, NULL);
     while ((c = getchar()) != '\n')
@@ -36,7 +35,7 @@ void adicionar(char *buffer, int *total_mem)
             ++(*total_mem);
             ++mem_left;
         }
-        *(buffer + (length++)) = c;
+        *(buffer + (*total_mem)) = c;
         --mem_left;
     }
     if ((tmp = (char *)realloc(buffer, (*total_mem) + 1)) == NULL)
@@ -47,7 +46,7 @@ void adicionar(char *buffer, int *total_mem)
     }
     buffer = tmp;
     ++(*total_mem);
-    *(buffer + length) = '\0';
+    *(buffer + (*total_mem)) = '\0';
     nomes++;
     return;
 }
@@ -65,6 +64,7 @@ void listar(char *buffer)
             i++;
         }
         printf("\n");
+        i++;
         --name_list;
         ++n_name;
     }
