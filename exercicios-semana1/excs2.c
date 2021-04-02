@@ -100,9 +100,8 @@ void remover(char *main_string, int *main_string_size)
 
 void adicionar(char *main_string, int *main_string_size)
 {
-    char new_name[20];
+    char new_name[50];
     int new_name_size;
-
     setbuf(stdin, NULL);
     system("cls");
     printf("Insira o nome a ser adicionado: ");
