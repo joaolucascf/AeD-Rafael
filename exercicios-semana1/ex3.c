@@ -26,19 +26,34 @@ int menu()
 void pause()
 {
     setbuf(stdin, NULL);
-    printf("\nPressione qualquer tecla.\n");
+    printf("\nPressione qualquer tecla para continuar.\n");
     getchar();
     setbuf(stdin, NULL);
-    return;
+}
+
+void clear()
+{
+    int n;
+    for (n = 0; n < 10; n++)
+    {
+        printf("\n\n\n\n\n\n\n\n");
+    }
 }
 
 void buscar(int n_itens)
 {
+    if (n_itens == 0)
+    {
+        clear();
+        printf("Nenhum item armazenado.\n");
+        pause();
+        return;
+    }
     int i;
     char search_name[10];
     person *p;
     p = pBuffer;
-    system("cls");
+    clear();
     printf("Digite o nome a ser buscado: ");
     scanf(" %[^\n]", search_name);
     for (i = 0; i < n_itens; i++, p++)
@@ -58,7 +73,7 @@ void buscar(int n_itens)
 
 void adicionar(int *n_itens)
 {
-    system("cls");
+    clear();
     person *p;
     (*n_itens) = (*n_itens) + 1;
     if ((pBuffer = (person *)realloc(pBuffer, sizeof(person) * *n_itens)) == NULL)
@@ -76,7 +91,7 @@ void adicionar(int *n_itens)
     scanf("%d", &p->idade);
     printf("\nInsira o telefone: ");
     scanf("%d", &p->telefone);
-    system("cls");
+    clear();
     printf("Item adicionado com sucesso.\n");
     pause();
     return;
@@ -86,8 +101,15 @@ void listar(int n_itens)
 {
     int i = 0;
     person *p;
+    if (n_itens == 0)
+    {
+        clear();
+        printf("Nenhum item armazenado.\n");
+        pause();
+        return;
+    }
     p = pBuffer;
-    system("cls");
+    clear();
     while (i < n_itens)
     {
         printf("\n--- ITEM %d ---\n", i + 1);
@@ -104,26 +126,26 @@ void listar(int n_itens)
 void apaga(int *n_itens)
 {
     person *p, *p1;
-    int i_remove=0;
-
-    if(*n_itens == 0){
-        printf("\nNenhum item adicionado.\n");
+    int i_remove = 0;
+    listar(*n_itens);
+    if (*n_itens == 0)
+    {
+        clear();
+        printf("Nenhum item armazenado.\n");
+        pause();
         return;
     }
-
     printf("\nQual indice voce deseja apagar: ");
     scanf("%d", &i_remove);
-
-    if (i_remove > *n_itens)
+    if (i_remove > *n_itens || i_remove <= 0)
     {
         printf("\nÍndice inválido\n");
         return;
     }
-
     if (i_remove == *n_itens)
     {
-        pBuffer = (person *)realloc(pBuffer, (sizeof(person) * (*n_itens)));
         *n_itens = *n_itens - 1;
+        pBuffer = (person *)realloc(pBuffer, (sizeof(person) * (*n_itens)));
         return;
     }
     p = pBuffer + (sizeof(person) * (i_remove - 1));
@@ -138,7 +160,7 @@ int main()
     int n_itens = 0;
     for (;;)
     {
-        system("cls");
+        clear();
         switch (menu())
         {
         case 1:
@@ -154,6 +176,7 @@ int main()
             listar(n_itens);
             break;
         case 5:
+            free(pBuffer);
             return 0;
             break;
         default:
