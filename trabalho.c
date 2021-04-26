@@ -216,7 +216,6 @@ int main()
         case 5:
             free(pBuffer);
             free(ini);
-            free(prox);
             return 0;
             break;
         default:
